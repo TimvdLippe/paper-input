@@ -37,6 +37,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="has-tabindex">
+    <template>
+      <paper-input tabindex="0"></paper-input>
+    </template>
+  </test-fixture>
+
   <test-fixture id="label">
     <template>
       <paper-input label="foo"></paper-input>
@@ -211,7 +217,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     });
 
-
     suite('validation', function() {
 
       test('invalid attribute updated after calling validate()', function() {
@@ -253,6 +258,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         forceXIfStamp(input);
         assert.isTrue(input.inputElement.hasAttribute('aria-describedby'));
         assert.equal(input.inputElement.getAttribute('aria-describedby'), Polymer.dom(input.root).querySelector('paper-input-error').id + ' ' + Polymer.dom(input.root).querySelector('paper-input-char-counter').id, 'aria-describedby points to the error message and character counter');
+      });
+
+      test('focus the input with tabindex', function() {
+        var input = fixture('has-tabindex');
+        assert.notEqual(document.activeElement, input._focusableElement);
+        MockInteractions.focus(input);
+        assert.equal(document.activeElement, input._focusableElement);
+      });
+
+      test('blur the input with tabindex', function() {
+        var input = fixture('has-tabindex');
+        assert.notEqual(document.activeElement, input._focusableElement);
+        MockInteractions.focus(input);
+        assert.equal(document.activeElement, input._focusableElement);
+        MockInteractions.blur(input);
+        assert.notEqual(document.activeElement, input._focusableElement);
       });
 
     });
