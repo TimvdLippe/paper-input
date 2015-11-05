@@ -257,6 +257,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     });
 
+    suite('number', function(){
+      if (!isSupportedType('number')) {
+        console.warn('number tests could not be run because type "number" is not supported by this browser!');
+        return;
+      }
+      var data = ['2.1', 0, 1.2, '1.2e+1', -10];
+      test('value and valueAsNumber updated', function() {
+        var input = fixture('basic');
+        input.type = 'number';
+        for(var i = 0, l = data.length; i < l; i++){
+          input.valueAsNumber = data[i];
+          assert.isTrue(typeof input.value === 'string');
+          assert.isTrue(typeof input.valueAsNumber === 'number');
+          assert.strictEqual(input.value, parseFloat(data[i]) + '');
+          assert.strictEqual(input.valueAsNumber, parseFloat(data[i]));
+          assert.strictEqual(input.inputElement.bindValueAsNumber, input.valueAsNumber);
+        }
+      });
+    });
+
+    suite('date', function(){
+      if (!isSupportedType('date')) {
+        console.warn('date tests could not be run because type "date" is not supported by this browser!');
+        return;
+      }
+      var data = ['2015-10-10', new Date('2015-10-10')];
+      test('value and valueAsDate updated', function() {
+        var input = fixture('basic');
+        input.type = 'date';
+        for(var i = 0, l = data.length; i < l; i++) {
+          // reset the value so we can check it after
+          input.value = '-';
+          input.valueAsDate = data[i];
+          assert.isTrue(typeof input.value === 'string');
+          // was updated to the date
+          assert.notEqual(input.value, '-');
+          assert.isTrue(input.valueAsDate instanceof Date);
+          assert.strictEqual(input.inputElement.bindValueAsDate.valueOf(), input.valueAsDate.valueOf());
+        }
+      });
+    });
+
+    function isSupportedType(type) {
+      var input = document.createElement('input');
+      input.setAttribute('type', type);
+      return (input.type === type);
+    }
   </script>
 
 </body>

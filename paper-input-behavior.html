@@ -48,6 +48,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       /**
+       * The value as number for this input. Bind this to the `<input is="iron-input">`'s
+       * `bindValueAsNumber` property.
+       */
+      valueAsNumber: {
+        type: Number
+      },
+
+      /**
+       * The value as date for this input. Bind this to the `<input is="iron-input">`'s
+       * `bindValueAsDate` property.
+       */
+      valueAsDate: {
+        type: Date
+      },
+
+      /**
        * Set to true to disable this input. Bind this to both the `<paper-input-container>`'s
        * and the input's `disabled` property.
        */
@@ -331,6 +347,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     attached: function() {
       this._updateAriaLabelledBy();
+      this.inputElement.addEventListener('bind-value-changed', this._updateBindValues.bind(this));
     },
 
     _appendStringWithSpace: function(str, more) {
@@ -441,6 +458,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           cancelable: event.cancelable
         });
       }
+    },
+    
+    _updateBindValues: function(){
+      this.value = this.inputElement.bindValue;
+      this.valueAsNumber = this.inputElement.bindValueAsNumber;
+      this.valueAsDate = this.inputElement.bindValueAsDate;
     }
 
   };
